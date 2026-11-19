@@ -45,3 +45,5 @@ test('Export refuses unsafe source URL even if field changes',async()=>{const x=
 test('Export refuses missing webpage source',async()=>{const x=setup();x.fields.title.value='Note';x.fields.content.value='Body';await x.click('download');assert.equal(x.downloaded,false);assert.match(x.fields.status.textContent,/valid webpage/)});
 
 test('Failed capture clears previous preview and blocks stale export',async()=>{const x=setup({url:'chrome://settings'});x.fields.title.value='Old secret';x.fields.content.value='Old data';x.fields.source.value='https://example.com/';x.fields.tags.value='private';await x.click('capture');assert.equal(x.fields.title.value,'');assert.equal(x.fields.content.value,'');assert.equal(x.fields.source.value,'');assert.equal(x.fields.tags.value,'');await x.click('download');assert.equal(x.downloaded,false)});
+
+test('Cancel invalidates any in-progress capture request',()=>{assert.match(code,/captureRequest\+\+/);assert.match(code,/request!==captureRequest/);assert.match(code,/const request=\+\+captureRequest/)});
