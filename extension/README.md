@@ -36,3 +36,6 @@ The extension removes URL login credentials, query parameters (the part after ?)
 
 Click **Copy** to put selected text on the clipboard, then click **Open Google Keep**. In the new Google Keep tab, create a note and paste with Ctrl+V. The extension never signs in, writes a Keep note automatically, or uploads captured text. Browser opening remains pending real Chrome/Brave verification.
 
+
+**Copy for Keep** copies the title and body together with a blank line between them. This is separate from **Copy**, which copies body text only. The user still chooses whether to paste into Keep; no automatic write or account access occurs.
+

@@ -19,3 +19,5 @@ el('cancel').addEventListener('click',()=>{captureRequest++;for(const id of ['ti
 
 
 el('keep').addEventListener('click',async()=>{try{await chrome.tabs.create({url:'https://keep.google.com/'});status('Google Keep opened. Paste copied text into a new note manually.')}catch(e){status('Could not open Google Keep. Visit https://keep.google.com/ manually.')}});
+
+el('keepCopy').addEventListener('click',async()=>{try{const title=el('title').value.trim();const body=el('content').value.trim();if(!body)throw Error('Capture text first.');await navigator.clipboard.writeText(title?title+'\n\n'+body:body);status('Title and text copied. Open Google Keep and paste manually.')}catch(e){status(e?.message||'Copy unavailable.')}});
