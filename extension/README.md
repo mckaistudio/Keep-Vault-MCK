@@ -20,3 +20,8 @@ The **Save file** button downloads a JSON capture file locally. It does NOT impo
 - Manual install, capture, copy, save, cancel, shortcut, Keep assistance, safe web-app handoff: PENDING.
 
 Test with a separate temporary browser profile only; never disturb the user's normal browser tabs or data. Stop test browsers after use. Do not merge `main` without approval.
+
+## Keyboard shortcut
+
+The extension suggests **Ctrl+Shift+Y** to open its popup. If it conflicts with another shortcut, open **chrome://extensions/shortcuts** in Chrome or **brave://extensions/shortcuts** in Brave and assign a different key. The shortcut only opens the popup; capture still requires a deliberate button click.
+
