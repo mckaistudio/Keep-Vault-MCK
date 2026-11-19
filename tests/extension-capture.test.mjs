@@ -3,6 +3,8 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import vm from 'node:vm';
+import {parseExtensionCapture,isExtensionCaptureJson} from '../src/extensionCaptureImport.ts';
+import {reviewImport} from '../src/importExport.ts';
 const root=path.resolve('extension/dist');
 const code=fs.readFileSync(path.join(root,'popup.js'),'utf8');
 const manifest=JSON.parse(fs.readFileSync(path.join(root,'manifest.json'),'utf8'));
@@ -56,3 +58,5 @@ test('Cancel during delayed page selection ignores late result',async()=>{let re
 test('Google Keep assistance opens official website without auto-upload',async()=>{const x=setup();await x.click('keep');assert.equal(x.openedKeepUrl,'https://keep.google.com/');assert.match(x.fields.status.textContent,/manually/)});
 test('Every popup button has a registered click handler',()=>{const html=fs.readFileSync(path.join(root,'popup.html'),'utf8');const ids=[...html.matchAll(/<button\s+id="([^"]+)"/g)].map(m=>m[1]);assert.deepEqual(ids,['capture','copy','download','cancel','keep']);for(const id of ids)assert.ok(code.includes("el('"+id+"').addEventListener('click'"),'No handler for '+id)});
 test('Popup JS only references existing elements',()=>{const html=fs.readFileSync(path.join(root,'popup.html'),'utf8');const ids=new Set([...html.matchAll(/\bid="([^"]+)"/g)].map(m=>m[1]));for(const [,id] of code.matchAll(/el\('([^']+)'\)/g))assert.ok(ids.has(id),'Missing popup element: '+id)});
+
+test('Full local handoff: capture, save JSON, recognize, parse and review',async()=>{const x=setup({url:'https://example.com/article?token=private#section',selection:'Selected text for my vault'});await x.click('capture');x.fields.tags.value='Learning, Useful';await x.click('download');assert.equal(x.downloaded,true);const json=x.blobParts[0];assert.equal(isExtensionCaptureJson(json),true);const candidate=parseExtensionCapture(json,x.downloadName);assert.equal(candidate.body,'Selected text for my vault');assert.equal(candidate.sourceId,'https://example.com/article');assert.deepEqual(candidate.tags,['learning','useful']);const review=reviewImport([candidate],[]);assert.equal(review.ready.length,1);assert.equal(review.duplicates.length,0);assert.equal(review.invalid.length,0)});
