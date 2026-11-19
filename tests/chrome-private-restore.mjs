@@ -24,5 +24,12 @@ try{
  console.log('Restore result:',message);
  assert.match(message,/Restored 1 encrypted records/);
  assert.equal(await run('document.body.innerText.includes("Browser Recovery Fixture")'),true);
+ const setPassword='(()=>{const el=document.querySelector("input[type=password]");if(!el)return false;Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,"value").set.call(el,"Browser-Restore-2026!");el.dispatchEvent(new Event("input",{bubbles:true}));return true})()';
+ assert.equal(await run(setPassword),true);
+ await new Promise(r=>setTimeout(r,500));
+ assert.equal(await run('(()=>{const b=[...document.querySelectorAll("button")].find(x=>x.innerText==="Unlock");if(!b||b.disabled)return false;b.click();return true})()'),true);
+ await new Promise(r=>setTimeout(r,2000));
+ assert.equal(await run('document.querySelector("textarea[readonly]")?.value'),'Synthetic browser restore test');
+ console.log('PASS: restored private record unlocked with original passphrase');
  console.log('PASS: Chrome private backup import and confirmation');
 }finally{if(targetId)await call('Target.closeTarget',{targetId}).catch(()=>{});ws.close()}
