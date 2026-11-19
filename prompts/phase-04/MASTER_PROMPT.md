@@ -1,0 +1,3 @@
+# Keep Vault MCK — Phase 4: Workflow Builder
+
+Maintain the offline-first React/TypeScript/IndexedDB application. Preserve Phase 1–3 notes, tags, categories and prompt revisions. Build a lightweight workflow editor with named workflows, editable/reorderable steps, {{input}} and {{previous}} variables, local prompt preparation, per-step copy, and saved run history. Validate empty input/names/templates, duplicate IDs, and 20-step limit. This is rule-based prompt preparation, NOT AI execution. Handle IndexedDB/clipboard failures, verify all earlier phases, run npm test and npm run build, test in Brave, and commit source only to development branch. Do not merge main without approval. The prompt file is independent of app runtime.
