@@ -1,13 +1,15 @@
 ﻿# Phase 6 Verification â€” 19 November 2026
 
 ## Verified
-- Node automated tests: **30/30 passed** (including ZIP CRC/integrity, AES-GCM, wrong passphrase, tampering and private-record backup).
+- Node automated tests: **32/32 passed** (including ZIP CRC/integrity, AES-GCM, wrong passphrase, tampering and private-record backup).
 - TypeScript and Vite production build: **PASS**.
 - Local Vite production preview: HTTP **200**.
 - Real Brave browser (isolated profile) loaded dashboard and rendered navigation.
 - Real Brave browser clicked **Import & Backup** and **Private Vault**, confirmed both panels and their backup controls.
 - Real Brave browser verified private record encryption/save, wrong-password rejection, successful unlock, lock hiding decrypted content, and encrypted private-record backup export.
 - Real Brave browser imported a newly created, integrity-checked ZIP backup containing one test note. The restore review showed **Ready: 1**; clicking **Import 1 notes** saved the note and displayed a success message. Reimporting the same ZIP showed **Ready: 0** and **Duplicate/quarantined: 1**. No original user notes were modified.
+
+- Node recovery drill round-tripped an actual encrypted private record through backup export, parse, merge, original-passphrase decrypt and duplicate detection; wrong passphrase was rejected. Both new recovery tests passed.
 
 ## Scope / limitations
 - Browser checks used Chrome DevTools Protocol in a separate Brave profile, not the user's regular profile.
@@ -23,4 +25,5 @@
 
 ## Source
 Private GitHub branch: `development/phase-01-foundation`; ZIP backup implementation commit: `acf3aa6`.
+
 
