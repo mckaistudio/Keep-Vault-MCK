@@ -13,17 +13,19 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '24'
-      - name: Check source availability
-        id: source
-        shell: bash
+      - name: Require complete source and tests
         run: |
-          if [ -f package.json ]; then echo 'ready=true' >> "$GITHUB_OUTPUT"; else echo 'ready=false' >> "$GITHUB_OUTPUT"; echo 'BLOCKED: application source not yet committed'; fi
+          test -f package.json
+          test -f index.html
+          test -f src/main.tsx
+          test -f src/store.ts
+          test -f src/promptEngine.ts
+          test -f src/style.css
+          test -f tests/organization.test.mjs
+          test -f tests/promptEngine.test.mjs
       - name: Install dependencies
-        if: steps.source.outputs.ready == 'true'
         run: npm install --no-audit --no-fund
       - name: Unit tests
-        if: steps.source.outputs.ready == 'true'
         run: npm test
       - name: Production build
-        if: steps.source.outputs.ready == 'true'
         run: npm run build
