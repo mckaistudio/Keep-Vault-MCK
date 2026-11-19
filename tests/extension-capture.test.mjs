@@ -43,3 +43,5 @@ test('Export normalizes duplicate and overlong tags for importer',async()=>{cons
 
 test('Export refuses unsafe source URL even if field changes',async()=>{const x=setup();await x.click('capture');x.fields.source.value='https://example.com/?token=secret';await x.click('download');assert.equal(x.downloaded,false);assert.match(x.fields.status.textContent,/not safe/)});
 test('Export refuses missing webpage source',async()=>{const x=setup();x.fields.title.value='Note';x.fields.content.value='Body';await x.click('download');assert.equal(x.downloaded,false);assert.match(x.fields.status.textContent,/valid webpage/)});
+
+test('Failed capture clears previous preview and blocks stale export',async()=>{const x=setup({url:'chrome://settings'});x.fields.title.value='Old secret';x.fields.content.value='Old data';x.fields.source.value='https://example.com/';x.fields.tags.value='private';await x.click('capture');assert.equal(x.fields.title.value,'');assert.equal(x.fields.content.value,'');assert.equal(x.fields.source.value,'');assert.equal(x.fields.tags.value,'');await x.click('download');assert.equal(x.downloaded,false)});
