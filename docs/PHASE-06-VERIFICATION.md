@@ -27,3 +27,6 @@
 Private GitHub branch: `development/phase-01-foundation`; ZIP backup implementation commit: `acf3aa6`.
 
 
+
+- Chrome private-record restore UI drill: PASS. Imported a synthetic AES-encrypted private backup through the file input, confirmed restore, and verified the new record appears. Test ran in an isolated Chrome profile. This browser drill did not re-unlock the imported record; a separate Node recovery drill verified decryption with its original passphrase.
+
