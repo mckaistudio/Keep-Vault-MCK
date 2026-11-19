@@ -40,3 +40,6 @@ test('Source URL removes query tokens, fragment and login credentials',async()=>
 
 
 test('Export normalizes duplicate and overlong tags for importer',async()=>{const x=setup();await x.click('capture');x.fields.tags.value='Useful, useful, '+ 'X'.repeat(60);await x.click('download');const data=JSON.parse(x.blobParts[0]);assert.deepEqual(data.tags,['useful','x'.repeat(40)])});
+
+test('Export refuses unsafe source URL even if field changes',async()=>{const x=setup();await x.click('capture');x.fields.source.value='https://example.com/?token=secret';await x.click('download');assert.equal(x.downloaded,false);assert.match(x.fields.status.textContent,/not safe/)});
+test('Export refuses missing webpage source',async()=>{const x=setup();x.fields.title.value='Note';x.fields.content.value='Body';await x.click('download');assert.equal(x.downloaded,false);assert.match(x.fields.status.textContent,/valid webpage/)});
