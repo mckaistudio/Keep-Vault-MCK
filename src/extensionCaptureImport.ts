@@ -7,6 +7,7 @@ export function parseExtensionCapture(text:string,filename:string):ImportCandida
  let input:unknown;try{input=JSON.parse(text)}catch{throw new Error('Invalid capture JSON.')}
  if(!input||typeof input!=='object'||Array.isArray(input))throw new Error('Invalid capture object.');
  const data=input as Record<string,unknown>;
+ if(data.format!==undefined&&data.format!=='keep-vault-mck-capture-v1')throw new Error('Unsupported capture format.');
  if(typeof data.title!=='string'||!data.title.trim()||data.title.length>160)throw new Error('Invalid capture title.');
  if(typeof data.body!=='string'||!data.body.trim()||data.body.length>20000)throw new Error('Invalid capture text.');
  if(typeof data.category!=='string'||!Object.hasOwn(categories,data.category))throw new Error('Invalid capture category.');
@@ -19,4 +20,5 @@ export function parseExtensionCapture(text:string,filename:string):ImportCandida
 }
 
 export function isExtensionCaptureJson(text:string):boolean{try{const obj:unknown=JSON.parse(text);return !!obj&&typeof obj==='object'&&!Array.isArray(obj)&&(obj as Record<string,unknown>).format==='keep-vault-mck-capture-v1'}catch{return false}}
+
 

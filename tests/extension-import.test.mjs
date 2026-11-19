@@ -21,3 +21,5 @@ test('Reject capture with more than 20,000 characters',()=>assert.throws(()=>par
 
 test('Recognize renamed capture export by format marker',()=>assert.equal(isExtensionCaptureJson(JSON.stringify({...valid,format:'keep-vault-mck-capture-v1'})),true));
 test('Do not misclassify Google Keep note containing marker text',()=>assert.equal(isExtensionCaptureJson(JSON.stringify({title:'Keep',textContent:'keep-vault-mck-capture-v1'})),false));
+
+test('Reject unrecognized capture format',()=>assert.throws(()=>parse({...valid,format:'different-v1'}),/Unsupported capture format/));

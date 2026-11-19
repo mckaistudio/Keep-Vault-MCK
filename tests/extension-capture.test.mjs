@@ -32,8 +32,9 @@ test('Reject selection ending inside editable content',async()=>{const focusNode
 test('Preserve Unicode in captured text',async()=>{const x=setup({selection:'Urdu اردو — ਪੰਜਾਬੀ'});await x.click('capture');assert.equal(x.fields.content.value,'Urdu اردو — ਪੰਜਾਬੀ')});
 
 
-test('Save creates dated local JSON with correct fields',async()=>{const x=setup();await x.click('capture');x.fields.tags.value='alpha, beta';await x.click('download');assert.equal(x.downloaded,true);assert.match(x.downloadName,/^keep-vault-capture-\d{4}-/);const data=JSON.parse(x.blobParts[0]);assert.equal(data.title,'Article');assert.equal(data.body,'Hello world');assert.equal(data.sourceUrl,'https://example.com/article');assert.deepEqual(data.tags,['alpha','beta']);assert.ok(data.capturedAt)});
+test('Save creates dated local JSON with correct fields',async()=>{const x=setup();await x.click('capture');x.fields.tags.value='alpha, beta';await x.click('download');assert.equal(x.downloaded,true);assert.match(x.downloadName,/^keep-vault-capture-\d{4}-/);const data=JSON.parse(x.blobParts[0]);assert.equal(data.format,'keep-vault-mck-capture-v1');assert.equal(data.title,'Article');assert.equal(data.body,'Hello world');assert.equal(data.sourceUrl,'https://example.com/article');assert.deepEqual(data.tags,['alpha','beta']);assert.ok(data.capturedAt)});
 
 
 
 test('Source URL removes query tokens, fragment and login credentials',async()=>{const x=setup({url:'https://user:secret@example.com/article?token=private#section'});await x.click('capture');assert.equal(x.fields.source.value,'https://example.com/article')});
+
