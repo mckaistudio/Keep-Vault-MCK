@@ -54,3 +54,5 @@ test('Cancel during delayed page selection ignores late result',async()=>{let re
 
 
 test('Google Keep assistance opens official website without auto-upload',async()=>{const x=setup();await x.click('keep');assert.equal(x.openedKeepUrl,'https://keep.google.com/');assert.match(x.fields.status.textContent,/manually/)});
+test('Every popup button has a registered click handler',()=>{const html=fs.readFileSync(path.join(root,'popup.html'),'utf8');const ids=[...html.matchAll(/<button\s+id="([^"]+)"/g)].map(m=>m[1]);assert.deepEqual(ids,['capture','copy','download','cancel','keep']);for(const id of ids)assert.ok(code.includes("el('"+id+"').addEventListener('click'"),'No handler for '+id)});
+test('Popup JS only references existing elements',()=>{const html=fs.readFileSync(path.join(root,'popup.html'),'utf8');const ids=new Set([...html.matchAll(/\bid="([^"]+)"/g)].map(m=>m[1]));for(const [,id] of code.matchAll(/el\('([^']+)'\)/g))assert.ok(ids.has(id),'Missing popup element: '+id)});
