@@ -1,0 +1,3 @@
+# Keep Vault MCK — Phase 3 prompt
+
+Inspect and verify Phase 1–2 source and tests before editing. Add honest LOCAL prompt intelligence: six-checkpoint explainable audit (not AI), original-preserving structured prompt improvement, coding/business/creative templates, [placeholder] fill-in, one-click copy, and note-linked revision history in IndexedDB. Label rule-based results clearly; do not claim Gemini/OpenRouter integration. Prevent stale drafts on note switching, reject empty copy/use actions, handle clipboard errors, and test revisions, templates and placeholder behavior. Keep changes on a development branch and report actual tests and commits. Do not start Phase 4.
