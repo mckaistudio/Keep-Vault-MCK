@@ -52,3 +52,7 @@ Verified in Chrome 157 with a temporary isolated profile: the real unpacked exte
 ## Installed Brave JSON download test (19 November 2026)
 
 Brave Chromium 158 in an isolated temporary profile exposed Chrome DevTools Protocol with `--enable-unsafe-extension-debugging`. `Extensions.loadUnpacked` loaded the real extension and returned an extension ID. The real popup **Save file** handler was invoked with manually populated safe sample title/body/source/tags. Brave downloaded a `keep-vault-capture-*.json` file, and the exported format marker, title, body, URL, timestamp, category and tags were parsed and checked. **PASS: Brave installed extension JSON export and actual local download.** **NOT VERIFIED:** selection capture from a real HTTP(S) page via the installed extension and user-granted activeTab access, full browser app import. This test does not imply full end-to-end webpage capture.
+
+## Real downloaded Brave file parsed by the web-app importer (19 November 2026)
+
+The actual JSON file downloaded by the installed Brave extension was passed to the actual web-app `parseExtensionCapture` and `isExtensionCaptureJson` functions using Node's TypeScript strip-types mode. Format recognition returned `true`; parsing returned the expected title, body, category, tags and sanitized source URL. The parser exited successfully. **PASS: real Brave-downloaded JSON is compatible with the app's capture parser.** This is a parser integration check, **not** an actual browser UI import or persistent IndexedDB save. No user notes were modified.
