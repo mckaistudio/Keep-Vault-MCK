@@ -9,7 +9,7 @@ const manifest=JSON.parse(fs.readFileSync(path.join(root,'manifest.json'),'utf8'
 function setup({url='https://example.com/article',selection='Hello world',activeElement=null,anchorNode=null,focusNode=null}={}){
  const fields=Object.fromEntries(['capture','copy','download','cancel','title','content','source','category','tags','status'].map(id=>[id,{value:id==='category'?'PMC':'',textContent:'',listeners:{},addEventListener(type,fn){this.listeners[type]=fn;}}]));
  let selected=selection, currentUrl=url, copied='',downloaded=false,downloadName='',blobParts=null;
- const context={document:{getElementById:id=>fields[id],activeElement},window:{getSelection:()=>({toString:()=>selected,anchorNode,focusNode})},chrome:{tabs:{query:async()=>[{id:1,url:currentUrl,title:'Article'}]},scripting:{executeScript:async({func})=>[{result:vm.runInNewContext(`(${func.toString()})()`,{window:{getSelection:()=>({toString:()=>selected,anchorNode,focusNode})},document:{activeElement}})}]}},navigator:{clipboard:{writeText:async text=>{copied=text}}},Blob:class{constructor(parts){blobParts=parts}},URL:{createObjectURL:()=> 'blob:test',revokeObjectURL:()=>{}},setTimeout:()=>{}};
+ const context={document:{getElementById:id=>fields[id],activeElement},window:{getSelection:()=>({toString:()=>selected,anchorNode,focusNode})},chrome:{tabs:{query:async()=>[{id:1,url:currentUrl,title:'Article'}]},scripting:{executeScript:async({func})=>[{result:vm.runInNewContext(`(${func.toString()})()`,{window:{getSelection:()=>({toString:()=>selected,anchorNode,focusNode})},document:{activeElement}})}]}},navigator:{clipboard:{writeText:async text=>{copied=text}}},Blob:class{constructor(parts){blobParts=parts}},URL:class extends URL{static createObjectURL(){return 'blob:test'}static revokeObjectURL(){}},setTimeout:()=>{}};
  context.document.createElement=()=>({set download(value){downloadName=value},click(){downloaded=true}});
  vm.runInNewContext(code,context);
  return {fields,click:async id=>fields[id].listeners.click(),get copied(){return copied},get downloaded(){return downloaded},get downloadName(){return downloadName},get blobParts(){return blobParts}};
@@ -34,3 +34,6 @@ test('Preserve Unicode in captured text',async()=>{const x=setup({selection:'Urd
 
 test('Save creates dated local JSON with correct fields',async()=>{const x=setup();await x.click('capture');x.fields.tags.value='alpha, beta';await x.click('download');assert.equal(x.downloaded,true);assert.match(x.downloadName,/^keep-vault-capture-\d{4}-/);const data=JSON.parse(x.blobParts[0]);assert.equal(data.title,'Article');assert.equal(data.body,'Hello world');assert.equal(data.sourceUrl,'https://example.com/article');assert.deepEqual(data.tags,['alpha','beta']);assert.ok(data.capturedAt)});
 
+
+
+test('Source URL removes query tokens, fragment and login credentials',async()=>{const x=setup({url:'https://user:secret@example.com/article?token=private#section'});await x.click('capture');assert.equal(x.fields.source.value,'https://example.com/article')});

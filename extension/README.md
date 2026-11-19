@@ -25,3 +25,8 @@ Test with a separate temporary browser profile only; never disturb the user's no
 
 The extension suggests **Ctrl+Shift+Y** to open its popup. If it conflicts with another shortcut, open **chrome://extensions/shortcuts** in Chrome or **brave://extensions/shortcuts** in Brave and assign a different key. The shortcut only opens the popup; capture still requires a deliberate button click.
 
+
+## Source URL privacy
+
+The extension removes URL login credentials, query parameters (the part after ?), and fragments (the part after #) before showing or exporting the source. This prevents accidental export of common URL tokens, but some links may no longer point to the exact search result or section. Review captured text and source before saving; never select passwords, OTPs, payment information, or private account data.
+
