@@ -17,3 +17,5 @@ el('cancel').addEventListener('click',()=>{captureRequest++;for(const id of ['ti
 
 
 
+
+el('keep').addEventListener('click',async()=>{try{await chrome.tabs.create({url:'https://keep.google.com/'});status('Google Keep opened. Paste copied text into a new note manually.')}catch(e){status('Could not open Google Keep. Visit https://keep.google.com/ manually.')}});

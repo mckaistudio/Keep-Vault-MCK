@@ -31,3 +31,8 @@ The extension suggests **Ctrl+Shift+Y** to open its popup. If it conflicts with 
 The extension removes URL login credentials, query parameters (the part after ?), and fragments (the part after #) before showing or exporting the source. This prevents accidental export of common URL tokens, but some links may no longer point to the exact search result or section. Review captured text and source before saving; never select passwords, OTPs, payment information, or private account data.
 
 
+
+## Google Keep manual fallback
+
+Click **Copy** to put selected text on the clipboard, then click **Open Google Keep**. In the new Google Keep tab, create a note and paste with Ctrl+V. The extension never signs in, writes a Keep note automatically, or uploads captured text. Browser opening remains pending real Chrome/Brave verification.
+
