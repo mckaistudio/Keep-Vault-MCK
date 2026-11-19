@@ -6,10 +6,10 @@ import vm from 'node:vm';
 const root=path.resolve('extension/dist');
 const code=fs.readFileSync(path.join(root,'popup.js'),'utf8');
 const manifest=JSON.parse(fs.readFileSync(path.join(root,'manifest.json'),'utf8'));
-function setup({url='https://example.com/article',selection='Hello world',activeElement=null,anchorNode=null}={}){
+function setup({url='https://example.com/article',selection='Hello world',activeElement=null,anchorNode=null,focusNode=null}={}){
  const fields=Object.fromEntries(['capture','copy','download','cancel','title','content','source','category','tags','status'].map(id=>[id,{value:id==='category'?'PMC':'',textContent:'',listeners:{},addEventListener(type,fn){this.listeners[type]=fn;}}]));
  let selected=selection, currentUrl=url, copied='',downloaded=false;
- const context={document:{getElementById:id=>fields[id],activeElement},window:{getSelection:()=>({toString:()=>selected,anchorNode})},chrome:{tabs:{query:async()=>[{id:1,url:currentUrl,title:'Article'}]},scripting:{executeScript:async({func})=>[{result:vm.runInNewContext(`(${func.toString()})()`,{window:{getSelection:()=>({toString:()=>selected,anchorNode})},document:{activeElement}})}]}},navigator:{clipboard:{writeText:async text=>{copied=text}}},Blob:class{},URL:{createObjectURL:()=> 'blob:test',revokeObjectURL:()=>{}},setTimeout:()=>{}};
+ const context={document:{getElementById:id=>fields[id],activeElement},window:{getSelection:()=>({toString:()=>selected,anchorNode,focusNode})},chrome:{tabs:{query:async()=>[{id:1,url:currentUrl,title:'Article'}]},scripting:{executeScript:async({func})=>[{result:vm.runInNewContext(`(${func.toString()})()`,{window:{getSelection:()=>({toString:()=>selected,anchorNode,focusNode})},document:{activeElement}})}]}},navigator:{clipboard:{writeText:async text=>{copied=text}}},Blob:class{},URL:{createObjectURL:()=> 'blob:test',revokeObjectURL:()=>{}},setTimeout:()=>{}};
  context.document.createElement=()=>({click(){downloaded=true}});
  vm.runInNewContext(code,context);
  return {fields,click:async id=>fields[id].listeners.click(),get copied(){return copied},get downloaded(){return downloaded}};
@@ -26,3 +26,7 @@ test('Save refuses empty content',async()=>{const x=setup();await x.click('downl
 
 test('Reject selection originating inside editable content',async()=>{const anchorNode={nodeType:1,closest:()=>({})};const x=setup({anchorNode});await x.click('capture');assert.match(x.fields.status.textContent,/Highlight/)});
 
+
+
+test('Reject selection ending inside editable content',async()=>{const focusNode={nodeType:1,closest:()=>({})};const x=setup({focusNode});await x.click('capture');assert.match(x.fields.status.textContent,/Highlight/)});
+test('Preserve Unicode in captured text',async()=>{const x=setup({selection:'Urdu اردو — ਪੰਜਾਬੀ'});await x.click('capture');assert.equal(x.fields.content.value,'Urdu اردو — ਪੰਜਾਬੀ')});
