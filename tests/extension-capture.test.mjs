@@ -63,3 +63,4 @@ test('Full local handoff: capture, save JSON, recognize, parse and review',async
 
 test('Copy for Google Keep includes title and body only on click',async()=>{const x=setup();await x.click('capture');await x.click('keepCopy');assert.equal(x.copied,'Article\n\nHello world');assert.match(x.fields.status.textContent,/manually/)});
 test('Copy for Google Keep rejects empty content',async()=>{const x=setup();await x.click('keepCopy');assert.equal(x.copied,'');assert.match(x.fields.status.textContent,/Capture text first/)});
+test('Google Keep copied text contains real blank line, not literal backslash-n',async()=>{const x=setup();await x.click('capture');await x.click('keepCopy');assert.equal(x.copied.split('\n').length,3);assert.equal(x.copied.includes(String.raw`\n`),false)});

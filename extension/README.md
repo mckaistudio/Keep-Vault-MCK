@@ -39,3 +39,8 @@ Click **Copy** to put selected text on the clipboard, then click **Open Google K
 
 **Copy for Keep** copies the title and body together with a blank line between them. This is separate from **Copy**, which copies body text only. The user still chooses whether to paste into Keep; no automatic write or account access occurs.
 
+
+## Real Chrome smoke test (19 Nov 2026)
+
+Using Chrome 157 with a separate temporary profile, the popup HTML and scripts rendered; capture, Copy for Keep and Open Google Keep handlers ran successfully with simulated extension APIs. In a separate real Chrome webpage, the captureSelection function returned highlighted public text and rejected an active private textarea. This verifies actual Chrome DOM behavior, **not** installed-extension permissions, keyboard shortcut, download, or actual end-to-end capture. Temporary Chrome processes were closed, and the user's normal browser tabs were untouched. Brave installation remains unverified.
+
