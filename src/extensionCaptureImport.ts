@@ -1,4 +1,4 @@
-import type {ImportCandidate} from './importExport.ts';
+﻿import type {ImportCandidate} from './importExport.ts';
 import {categories,normalizeTags} from './store.ts';
 
 /** Explicit user-selected extension export. Never imports directly or modifies storage. */
@@ -17,3 +17,6 @@ export function parseExtensionCapture(text:string,filename:string):ImportCandida
  if(!Array.isArray(data.tags)||data.tags.length>20||data.tags.some(x=>typeof x!=='string'||x.length>40))throw new Error('Invalid capture tags.');
  return {title:data.title.trim(),body:data.body,category:data.category as ImportCandidate['category'],tags:normalizeTags(data.tags.join(',')),source:filename,sourceId:source.toString()};
 }
+
+export function isExtensionCaptureJson(text:string):boolean{try{const obj:unknown=JSON.parse(text);return !!obj&&typeof obj==='object'&&!Array.isArray(obj)&&(obj as Record<string,unknown>).format==='keep-vault-mck-capture-v1'}catch{return false}}
+
