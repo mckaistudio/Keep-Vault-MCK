@@ -1,0 +1,3 @@
+# Phase 6 — Encrypted backup and recovery
+
+Add portable AES-256-GCM encrypted backups using browser Web Crypto, PBKDF2-SHA256 with 310,000 iterations, random salt and IV per backup. Require a passphrase of 12+ characters and confirmation before exporting. Allow restoring through preview and existing duplicate-safe import, never overwrite existing notes. Clearly state that browser IndexedDB remains unencrypted at rest and that losing the passphrase makes recovery impossible. Never store or log the passphrase. Validate malformed files, wrong passwords, tampering, and file size limits. Preserve all existing Phase 1–5 behavior. Run tests and full production build before reporting completion. Do not claim full browser verification without a real browser run.
