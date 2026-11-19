@@ -38,3 +38,5 @@ test('Save creates dated local JSON with correct fields',async()=>{const x=setup
 
 test('Source URL removes query tokens, fragment and login credentials',async()=>{const x=setup({url:'https://user:secret@example.com/article?token=private#section'});await x.click('capture');assert.equal(x.fields.source.value,'https://example.com/article')});
 
+
+test('Export normalizes duplicate and overlong tags for importer',async()=>{const x=setup();await x.click('capture');x.fields.tags.value='Useful, useful, '+ 'X'.repeat(60);await x.click('download');const data=JSON.parse(x.blobParts[0]);assert.deepEqual(data.tags,['useful','x'.repeat(40)])});
